@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Odokal · Ride. Mark. Remember.",
     description: site.description,
-    url: "/",
+    url: `${site.basePath}/`,
     siteName: "Odokal",
     locale: "en_IN",
     type: "website",

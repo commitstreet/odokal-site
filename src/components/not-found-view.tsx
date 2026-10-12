@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
+import { appPath } from "@/lib/site";
 import { InviteView } from "./invite-view";
 
 const subscribe = () => () => {};
@@ -13,7 +14,7 @@ const subscribe = () => () => {};
 export function NotFoundView() {
   const isInvite = useSyncExternalStore(
     subscribe,
-    () => /^\/i\/[^/]+\/?$/.test(window.location.pathname),
+    () => /^\/i\/[^/]+\/?$/.test(appPath(window.location.pathname)),
     () => false,
   );
   if (isInvite) return <InviteView />;

@@ -1,12 +1,13 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { appPath } from "@/lib/site";
 
 const subscribe = () => () => {};
 
 /** Code from /i/<code>/, or "" when it is missing or malformed. Null while prerendering. */
 function readCode(): string {
-  const parts = window.location.pathname.split("/").filter(Boolean);
+  const parts = appPath(window.location.pathname).split("/").filter(Boolean);
   const raw = parts[0] === "i" ? parts[1] : undefined;
   return raw && /^[A-Za-z0-9_-]{4,32}$/.test(raw) ? raw : "";
 }
