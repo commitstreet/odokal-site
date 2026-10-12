@@ -1,0 +1,175 @@
+@import "tailwindcss";
+
+/* Odokal brand tokens (docs/BRAND.md). Mist = light, Night = dark; follows the visitor's system setting. */
+:root {
+  --bg: #dde3da;
+  --surface: #f4f6f1;
+  --surface-2: #cdd5ca;
+  --ink: #16241f;
+  --ink-2: #4a5a52;
+  --primary: #1f3b33;
+  --on-primary: #f4f6f1;
+  --accent: #b4532a;
+  --on-accent: #ffffff;
+  --moss: #6e8b3d;
+  --line: #c3ccc0;
+  --tape-bg: #16241f;
+  --tape-fg: #dde3da;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1915;
+    --surface: #17241f;
+    --surface-2: #22322c;
+    --ink: #e3eae4;
+    --ink-2: #9daea5;
+    --primary: #2c4e43;
+    --on-primary: #e3eae4;
+    --accent: #e07a48;
+    --on-accent: #0f1915;
+    --moss: #8fb84e;
+    --line: #2a3b34;
+    --tape-bg: #e3eae4;
+    --tape-fg: #0f1915;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-moss: var(--moss);
+  --color-line: var(--line);
+  --color-tape-bg: var(--tape-bg);
+  --color-tape-fg: var(--tape-fg);
+  --font-sans: var(--font-plex-sans), system-ui, sans-serif;
+  --font-head: var(--font-plex-condensed), "Arial Narrow", sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --font-brand: var(--font-special-elite), "Courier New", monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
+/* Label-tape wordmark: always tilted the same way. */
+.tape {
+  font-family: var(--font-brand);
+  background: var(--tape-bg);
+  color: var(--tape-fg);
+  display: inline-block;
+  padding: 0.06em 0.4em 0.12em;
+  transform: rotate(-1.5deg);
+  line-height: 1.05;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+/* Odometer roll on first paint. The resting state is the final digit, so nothing hides without motion. */
+@keyframes odo-roll {
+  from { transform: translateY(-90%); }
+  to { transform: translateY(0); }
+}
+.odo-roll {
+  animation: odo-roll 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .odo-roll { animation: none; }
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Motion. Every effect has a finished resting state and stops for reduced motion. ---------- */
+
+/* Road ticker: two identical rows slide left by one row's width. */
+@keyframes road-scroll { to { transform: translateX(-50%); } }
+.road-scroll { animation: road-scroll 38s linear infinite; }
+.road-dash {
+  background: repeating-linear-gradient(90deg, #f2c230 0 46px, transparent 46px 86px);
+  animation: road-dash 0.9s linear infinite;
+}
+@keyframes road-dash { to { transform: translate(-86px, -50%); } }
+
+/* Live indicator on the riding phone. */
+@keyframes live-blink { 50% { opacity: 0.25; } }
+.live-dot { animation: live-blink 1.4s steps(2, jump-none) infinite; }
+
+/* Contour map drifts very slowly. */
+@keyframes topo-drift { from { transform: translate3d(0, 0, 0) scale(1.04); } to { transform: translate3d(-2%, -1.5%, 0) scale(1.04); } }
+.topo-drift { animation: topo-drift 60s ease-in-out infinite alternate; }
+
+/* Ghat route draws in with scroll. */
+.ghat-draw { stroke-dasharray: 1 1; stroke-dashoffset: 0; }
+@supports (animation-timeline: view()) {
+  .ghat-draw {
+    animation: ghat-draw linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 55%;
+  }
+  @keyframes ghat-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+
+  /* Sections lift in as they enter. They start mostly visible, so nothing is ever hidden. */
+  .reveal {
+    animation: reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 70%;
+  }
+  @keyframes reveal { from { opacity: 0.25; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+
+  /* Passport stamps thump down one after another. */
+  .stamp-in {
+    animation: stamp-in linear both;
+    animation-timeline: view();
+    animation-range: entry 20% cover 40%;
+  }
+  @keyframes stamp-in {
+    from { opacity: 0.2; scale: 1.6; }
+    70% { opacity: 1; scale: 0.94; }
+    to { opacity: 1; scale: 1; }
+  }
+}
+
+/* Enamel pins catch the light on hover. */
+.pin { transition: transform 0.3s cubic-bezier(0.3, 1.6, 0.5, 1); }
+.pin:hover { transform: rotate(-8deg) scale(1.08); }
+
+/* Headline underline: a dashed road line that keeps moving. */
+.road-underline {
+  background-image: repeating-linear-gradient(90deg, currentColor 0 18px, transparent 18px 30px);
+  background-size: 60px 0.09em;
+  background-repeat: repeat-x;
+  background-position: 0 100%;
+  padding-bottom: 0.08em;
+  animation: underline-run 1.2s linear infinite;
+}
+@keyframes underline-run { to { background-position: 60px 100%; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .road-scroll, .road-dash, .live-dot, .topo-drift, .road-underline, .reveal, .stamp-in, .ghat-draw { animation: none !important; }
+  .ghat-rider { display: none; }
+  .pin:hover { transform: none; }
+}
