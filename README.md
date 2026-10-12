@@ -21,19 +21,19 @@ pnpm build        # static site in out/
 | `NEXT_PUBLIC_WAITLIST_ENDPOINT` | Waitlist form is shown disabled with "Beta sign-ups open soon" |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | Contact address hidden in footer and privacy page |
 
-On GitHub, set `WAITLIST_ENDPOINT` and `CONTACT_EMAIL` as repository variables; the deploy workflow passes them to the build.
+On GitHub, set `SITE_URL` (e.g. `https://odokal.commitstreet.com`), `WAITLIST_ENDPOINT` and `CONTACT_EMAIL` as repository variables; the deploy workflow passes them to the build.
 
 The waitlist endpoint receives `POST {"email": string, "city"?: string}` as JSON and must answer 2xx. It needs CORS for the site's origin.
 
 ## Deploy (GitHub Pages)
 
-The website lives in the monorepo at `apps/web` and is published from a separate public repo, `vineyrawat/odokal-site`, so the backend and app stay private.
+The website lives in the monorepo at `apps/web` and is published from a separate public repo, `commitstreet/odokal-site`, so the backend and app stay private.
 
 1. `./scripts/publish.sh` copies the site into `~/Projects/odokal-site` (override with `ODOKAL_SITE_REPO`).
 2. Commit and push there. `.github/workflows/deploy.yml` builds and deploys to Pages.
 
 Hosting notes:
-- `public/CNAME` sets the custom domain `odokal.commitstreet.com`. DNS: a `CNAME` record for `odokal` on commitstreet.com pointing to `vineyrawat.github.io`.
+- `public/CNAME` sets the custom domain `odokal.commitstreet.com`. DNS: a `CNAME` record for `odokal` on commitstreet.com pointing to `commitstreet.github.io`.
 - `public/.nojekyll` stops GitHub from hiding the `_next/` folder.
 - GitHub Pages has no rewrites, so crew invite links (`/i/<code>`) are served by `404.html`, which shows the invite page for those paths.
 
