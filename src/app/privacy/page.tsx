@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Privacy", description: "How Odokal h
 
 export default function Privacy() {
   return (
-    <Prose eyebrow="Privacy" title="Your data" updated="9 October 2026">
+    <Prose eyebrow="Privacy" title="Your data" updated="14 October 2026">
       <p>
         Odokal is not released yet. This policy covers this website and the beta waitlist. We will publish a full policy for
         the app, covering ride and location data, before the beta opens, and we will email everyone on the waitlist when we
@@ -16,7 +16,14 @@ export default function Privacy() {
       <h2>What we collect here</h2>
       <ul>
         <li>
-          <strong>Your email address</strong>, and the city you ride from if you choose one, when you join the waitlist.
+          <strong>Your email address</strong> when you join the waitlist.
+        </li>
+        <li>
+          <strong>Only if you choose to tell us:</strong> your first name, the city you ride from, what you ride, and whether
+          you ride with a crew (and its name).
+        </li>
+        <li>
+          <strong>Which sign-up form you used</strong> (for example, the top of the home page) and when you signed up.
         </li>
         <li>
           <strong>Nothing else.</strong> This site sets no cookies, runs no analytics or advertising scripts, and loads its
@@ -27,8 +34,14 @@ export default function Privacy() {
       <h2>How we use it</h2>
       <ul>
         <li>To email you when the beta opens, and when the app launches.</li>
-        <li>To decide which cities to invite to the beta first.</li>
+        <li>To decide which cities, bikes and crews to invite to the beta first.</li>
       </ul>
+
+      <h2>Where it is stored</h2>
+      <p>
+        Waitlist sign-ups are stored in a private Google Sheet that only the Odokal team can open. Google stores it on our
+        behalf and does not use it for advertising.
+      </p>
       <p>We never sell your email address or share it for anyone else&apos;s marketing.</p>
 
       <h2>How long we keep it</h2>

@@ -13,7 +13,7 @@ export function InviteView() {
       <p className="text-ink-2">
         Odokal is coming soon to Android. Join the beta list and we&apos;ll email you as soon as you can install it.
       </p>
-      <WaitlistForm compact />
+      <WaitlistForm compact source="invite" />
     </section>
   );
 }

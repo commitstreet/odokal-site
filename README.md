@@ -23,7 +23,29 @@ pnpm build        # static site in out/
 
 On GitHub, set `SITE_URL` (e.g. `https://odokal.commitstreet.com`), `WAITLIST_ENDPOINT` and `CONTACT_EMAIL` as repository variables; the deploy workflow passes them to the build.
 
-The waitlist endpoint receives `POST {"email": string, "city"?: string}` as JSON and must answer 2xx. It needs CORS for the site's origin.
+## Waitlist (Google Sheet)
+
+Sign-ups go to a private Google Sheet through a small Google Apps Script web app ([`scripts/waitlist-apps-script.gs`](scripts/waitlist-apps-script.gs)). Free, no limits worth worrying about, and the data stays in your Drive.
+
+1. Create a Google Sheet (e.g. "Odokal waitlist") in the account that should own the data.
+2. In the sheet: **Extensions → Apps Script**. Replace the editor's contents with `scripts/waitlist-apps-script.gs` and save.
+3. **Deploy → New deployment → Web app.** Execute as: **Me**. Who has access: **Anyone**. Authorize when asked.
+4. Copy the **Web app URL** (ends in `/exec`). Opening it in a browser should show `{"ok":true,"service":"odokal-waitlist"}`.
+5. In the `commitstreet/odokal-site` repo: **Settings → Secrets and variables → Actions → Variables**: set `WAITLIST_ENDPOINT` to that URL, and `CONTACT_EMAIL` (the privacy page needs it once the waitlist is open). Re-run the deploy.
+
+The first sign-up creates a `Waitlist` tab with the columns Joined, Updated, Email, Name, City, Bike, Crew, Crew name, Source. Signing up again with the same email updates that row, which is how the optional "tell us more" step fills in details.
+
+What the form sends (JSON as `text/plain`, so the browser skips the CORS preflight Apps Script can't answer):
+
+| Field | When |
+|---|---|
+| `email` | always |
+| `city` | optional, step one (full form) or step two |
+| `source` | step one: `hero`, `footer` or `invite` |
+| `name`, `bike`, `crew` (`have_crew` / `find_crew` / `solo`), `crewName` | optional, step two |
+| `website` | honeypot; any value and the script ignores the request |
+
+To change the script later, edit it in Apps Script and use **Deploy → Manage deployments → Edit → New version**, so the URL stays the same.
 
 ## Deploy (GitHub Pages)
 
